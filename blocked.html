@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Website Blocked - WebShield IDS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .warning-box {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+    }
+    .icon {
+      font-size: 80px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    h1 {
+      color: #dc3545;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+    .details {
+      background: #f8f9fa;
+      padding: 20px;
+      border-left: 4px solid #dc3545;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    .details p {
+      margin: 10px 0;
+      word-break: break-all;
+    }
+    .details strong {
+      color: #333;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    button {
+      flex: 1;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+      min-width: 150px;
+    }
+    .btn-safe {
+      background: #28a745;
+      color: white;
+    }
+    .btn-safe:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    .btn-proceed {
+      background: #ffc107;
+      color: #333;
+    }
+    .btn-proceed:hover {
+      background: #e0a800;
+    }
+  </style>
+</head>
+<body>
+  <div class="warning-box">
+    <div class="icon">🚫</div>
+    <h1>WEBSITE BLOCKED</h1>
+    <p class="subtitle">WebShield IDS has blocked this website to protect you</p>
+    
+    <div class="details">
+      <p><strong>Blocked URL:</strong><br><span id="blocked-url"></span></p>
+      <p><strong>Reason:</strong><br><span id="reason"></span></p>
+      <p><strong>Risk Level:</strong> <span style="color: #dc3545; font-weight: bold;">HIGH</span></p>
+    </div>
+    
+    <div class="button-group">
+      <button class="btn-safe" onclick="goBack()">
+        ← Go Back to Safety
+      </button>
+      <button class="btn-proceed" onclick="proceedAnyway()">
+        ⚠️ Proceed Anyway
+      </button>
+    </div>
+  </div>
+  
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('url');
+    const reason = params.get('reason');
+    
+    document.getElementById('blocked-url').textContent = url || 'Unknown';
+    document.getElementById('reason').textContent = reason || 'Malicious content detected';
+    
+    function goBack() {
+      window.history.back();
+    }
+    
+    function proceedAnyway() {
+      if (confirm('⚠️ WARNING: This site has been identified as dangerous.\n\nAre you absolutely sure you want to proceed?')) {
+        window.location.href = url;
+      }
+    }
+  </script>
+</body>
+</html>

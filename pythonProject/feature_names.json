@@ -1,0 +1,1 @@
+["index", "url_length", "domain_length", "path_length", "has_ip", "subdomain_count", "has_at", "has_double_slash", "special_chars", "is_https", "suspicious_tld", "has_suspicious_words"]
