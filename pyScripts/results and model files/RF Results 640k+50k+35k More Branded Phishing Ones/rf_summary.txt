@@ -1,0 +1,9 @@
+Random Forest Model Summary (v1.3.0)
+============================================================
+Accuracy: 0.9709
+Precision: 0.9709
+Recall: 0.9709
+F1 Score: 0.9709
+Validation Accuracy: 0.9694
+Total features: 66
+Saved model path: /content/drive/MyDrive/Webshield Dataset/RF Results 640k+50k+35k More Branded Phishing Ones/rf_url_classifier_v1.3.0.pkl
