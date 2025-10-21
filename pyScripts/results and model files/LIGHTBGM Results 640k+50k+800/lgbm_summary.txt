@@ -1,0 +1,9 @@
+LightGBM Model Summary (v1.3.0)
+============================================================
+Accuracy: 0.9659
+Precision: 0.9680
+Recall: 0.9659
+F1 Score: 0.9666
+Validation Accuracy: 0.9659
+Total features: 63
+Saved model path: /content/drive/MyDrive/Webshield Dataset/LIGHTBGM Results 640k+50k+800/lgbm_url_classifier_v1.3.0.pkl

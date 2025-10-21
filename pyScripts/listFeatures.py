@@ -1,7 +1,7 @@
 import pandas as pd
 
 # --- Load CSV ---
-file_path = '/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/original_650k_with_features.csv'  # replace with your actual CSV file path
+file_path = '/Users/rudrarajpurohit/Desktop/datasets/latest /original_650k_with_features.csv'  # replace with your actual CSV file path
 df = pd.read_csv(file_path)
 
 # --- List columns ---
