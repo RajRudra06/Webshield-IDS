@@ -50,7 +50,7 @@ if __name__ == "__main__":
         exit(1)
     
     # Extract features
-    df = add_features_to_tranco('tranco_top40k.csv', 'tranco_top50k_with_features.csv')
+    df = add_features_to_tranco('tranco_top40k.csv', 'tranco_top40k_with_features.csv')
     
     if df is not None:
         print("\n✅ Script completed successfully!")
