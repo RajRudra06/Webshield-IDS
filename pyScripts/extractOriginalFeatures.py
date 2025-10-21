@@ -56,7 +56,7 @@ if __name__ == "__main__":
     print("🚀 Starting Feature Extraction for Original Dataset\n")
     
     # Update this path to your actual dataset location
-    INPUT_FILE = '/Users/rudrarajpurohit/Downloads/malicious_phish 2.csv'
+    INPUT_FILE = '/Users/rudrarajpurohit/Downloads/Original 650k malicious phishing dataset.csv'
     # Check if file exists
     import os
     if not os.path.exists(INPUT_FILE):
