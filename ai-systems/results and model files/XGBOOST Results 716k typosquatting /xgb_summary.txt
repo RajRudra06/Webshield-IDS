@@ -1,0 +1,9 @@
+XGBoost Model Summary (v1.0.0)
+============================================================
+Accuracy: 0.9644
+Precision: 0.9654
+Recall: 0.9644
+F1 Score: 0.9647
+Validation Accuracy: 0.9628
+Total features: 66
+Saved model path: /content/drive/MyDrive/Webshield Dataset/XGBOOST Results 716k typosquatting /xgboost_url_classifier_v1.0.0.pkl
