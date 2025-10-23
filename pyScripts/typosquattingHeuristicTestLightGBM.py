@@ -12,7 +12,11 @@ Usage:
 import re
 from urllib.parse import urlparse
 from tldextract import extract
+from feature_utils import batch_extract_features,extract_features_enhanced
 from difflib import SequenceMatcher
+import pandas as pd
+import numpy as np
+import joblib
 
 # ============================================================
 # LEGITIMATE DOMAINS WHITELIST
@@ -318,14 +322,35 @@ def process_url_with_heuristic(url, model):
     Returns:
         dict with prediction, probabilities, and detection info
     """
-    # Step 1: Get model prediction
-    features = extract_features_for_model(url)  # Your feature extraction
-    model_pred = model.predict([features])[0]
-    model_proba = model.predict_proba([features])[0]
-    
-    # Convert to dict
+
+    artifact = joblib.load('/content/drive/MyDrive/Webshield Dataset/LIGHTGBM Results 716k typosquatting/lgbm_url_classifier_v1.3.0.pkl')
+    model = artifact['model']
+    features = artifact['feature_names']
+
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+
+    X_dict = extract_features_enhanced(url)
+    X = pd.DataFrame([X_dict])
+
+    for col in features:
+        if col not in X.columns:
+            X[col] = 0
+    X = X[features]
+
+    model_pred = model.predict(X)[0]
+    model_proba = model.predict_proba(X)[0]
     classes = model.classes_
     prob_dict = dict(zip(classes, model_proba))
+
+    # # Step 1: Get model prediction
+    # features = batch_extract_features(url)  # Your feature extraction
+    # model_pred = model.predict([features])[0]
+    # model_proba = model.predict_proba([features])[0]
+    
+    # # Convert to dict
+    # classes = model.classes_
+    # prob_dict = dict(zip(classes, model_proba))
     
     # Step 2: Apply heuristic layer
     final_pred, final_proba, reason = apply_typosquatting_heuristic(
