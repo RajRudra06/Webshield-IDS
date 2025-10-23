@@ -5,7 +5,8 @@ from sklearn.preprocessing import LabelEncoder
 from feature_utils import extract_features_enhanced
 from typosquattingHeuristicTestLightGBM import apply_typosquatting_heuristic 
 
-artifact = joblib.load('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/ai-systems/results and model files/LIGHTGBM Results 716k typosquatting /lgbm_url_classifier_v1.3.0.pkl')
+artifact_path = "/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/ai-systems/results and model files/XGBOOST Results 716k typosquatting /xgboost_url_classifier_v1.0.0.pkl"
+artifact = joblib.load(artifact_path)
 model = artifact['model']
 features = artifact['feature_names']
 
@@ -21,28 +22,36 @@ except:
 # SINGLE URL PREDICTION + HEURISTIC LAYER
 # ============================================================
 
-def process_url_with_heuristic_lightgbm(url):
+def process_url_with_heuristic_xgboost(url):
     """
     Run XGBoost model prediction + heuristic correction
     for a single URL.
     """
 
+    # ---------- Step 1: Add scheme if missing ----------
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
 
+    # ---------- Step 2: Feature extraction ----------
     X_dict = extract_features_enhanced(url)
     X = pd.DataFrame([X_dict])
 
+    # Align with training features
     for col in features:
         if col not in X.columns:
             X[col] = 0
     X = X[features]
 
-    model_pred = model.predict(X)[0]
-    model_proba = model.predict_proba(X)[0]
-    classes = model.classes_
-    prob_dict = dict(zip(classes, model_proba))
+    # ---------- Step 3: Model prediction ----------
+    proba = model.predict_proba(X)[0]             # probabilities (array)
+    pred_numeric = int(np.argmax(proba))          # numeric label
+    model_pred = le.inverse_transform([pred_numeric])[0]  # string label
 
+    # ---------- Step 4: Convert to dict (for heuristic layer) ----------
+    prob_dict = {le.classes_[i]: round(float(proba[i]), 4)
+                 for i in range(len(le.classes_))}
+
+    # ---------- Step 5: Apply heuristic layer ----------
     final_pred, final_proba, reason = apply_typosquatting_heuristic(
         url, model_pred, prob_dict
     )
@@ -73,7 +82,7 @@ if __name__ == "__main__":
 
     results = []
     for url in test_urls:
-        result = process_url_with_heuristic_lightgbm(url)
+        result = process_url_with_heuristic_xgboost(url)
         results.append(result)
         print("\nURL:", result['url'])
         print("Model Prediction:", result['model_prediction'])
@@ -84,6 +93,6 @@ if __name__ == "__main__":
 
     # Optional: save all results to CSV
     df_results = pd.DataFrame(results)
-    df_results.to_csv("lightgbm_heuristic_predictions.csv", index=False)
+    df_results.to_csv("xgboost_heuristic_predictions.csv", index=False)
     print("\n✅ Predictions saved to: xgboost_heuristic_predictions.csv")
 
