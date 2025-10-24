@@ -18,4 +18,4 @@ def drop_column(input_file, column_name, output_file=None):
     print(f"💾 Saved updated CSV to: {output_file}")
 
 # Example usage:
-drop_column('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/phishing_urls_4000.csv', 'seed')
+drop_column('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/tranco_9k.csv', 'rank')
