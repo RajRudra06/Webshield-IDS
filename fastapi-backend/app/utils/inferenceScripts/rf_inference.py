@@ -1,7 +1,7 @@
 import pandas as pd
 import joblib
-from feature_extraction import extract_features_enhanced
-from typoSquattingFunction import apply_typosquatting_heuristic
+from ..helperScripts.feature_extraction import extract_features_enhanced
+from ..helperScripts.typoSquattingFunction import apply_typosquatting_heuristic 
 
 artifact = joblib.load('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/fastapi-backend/models/716k typosquatting/rf classifier v_3.pkl')
 model = artifact['model']
@@ -23,7 +23,7 @@ def process_url_with_heuristic_rf(url):
     model_pred = model.predict(X)[0]         
     model_proba = model.predict_proba(X)[0]   
     classes = model.classes_                  
-    prob_dict = dict(zip(classes, model_proba))
+    prob_dict = {cls: float(prob) for cls, prob in zip(classes, model_proba)}
 
     final_pred, final_proba, reason = apply_typosquatting_heuristic(
         url, model_pred, prob_dict

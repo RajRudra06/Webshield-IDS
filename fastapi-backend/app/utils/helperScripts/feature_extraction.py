@@ -1,7 +1,7 @@
 import re
 from urllib.parse import urlparse
 from tldextract import extract
-from featureExtractionHelper import * 
+from .featureExtractionHelper import *
 from app.constants.legitimate_brand_domains import *
 
 def extract_features_enhanced(url):

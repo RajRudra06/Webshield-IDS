@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List,Dict, Optional
 
 class URLFeatures(BaseModel):
-    features: List[float]
+    url: str
 
 class URLRequest(BaseModel):
     url: str
@@ -11,6 +11,8 @@ class PredictionResponse(BaseModel):
     threat_detected: bool
     confidence: float
     model_used: str
+    category: str
+    probabilities: Dict[str, float]
     reasons: Optional[List[str]] = []
 
 class Feedback(BaseModel):
