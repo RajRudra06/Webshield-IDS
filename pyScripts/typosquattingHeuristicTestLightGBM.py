@@ -3,7 +3,7 @@ import numpy as np
 import joblib
 from sklearn.preprocessing import LabelEncoder
 from feature_utils import extract_features_enhanced
-from typosquattingHeuristicTestLightGBM import apply_typosquatting_heuristic 
+from typoSquattingHeuristicFunc import apply_typosquatting_heuristic 
 
 artifact = joblib.load('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/ai-systems/results and model files/LIGHTGBM Results 716k typosquatting /lgbm_url_classifier_v1.3.0.pkl')
 model = artifact['model']
