@@ -1,0 +1,212 @@
+ebshield-extension/fastapi_backend/app/utils/inferenceScripts/metaLearningLighgbm.py"
+============================================================
+STEP 1: Loading and Analyzing Data
+============================================================
+
+Total samples: 32000
+
+Class distribution:
+type
+benign        17000
+defacement     9000
+phishing       5000
+malware        1000
+Name: count, dtype: int64
+
+Class percentages:
+type
+benign        53.125
+defacement    28.125
+phishing      15.625
+malware        3.125
+Name: proportion, dtype: float64
+
+Train set: 25600 samples
+Test set: 6400 samples
+
+============================================================
+STEP 2: Extracting Base Model Predictions
+============================================================
+
+Collecting predictions from LightGBM, XGBoost, and Random Forest...
+This may take a few minutes...
+
+[1/2] Processing training URLs...
+Train: 100%|██████████████████████████████| 25600/25600 [16:19<00:00, 26.15it/s]
+
+[2/2] Processing test URLs...
+Test: 100%|█████████████████████████████████| 6400/6400 [04:07<00:00, 25.83it/s]
+
+Raw meta-feature shapes:
+  X_train: (25600, 12) (samples × base predictions)
+  X_test: (6400, 12)
+
+============================================================
+STEP 2.5: Engineering Meta-Features
+============================================================
+
+Creating engineered features:
+  - Mean/Std per class across models
+  - Prediction agreement score
+  - Entropy (uncertainty measure)
+  - Confidence margin
+
+Enhanced meta-feature shapes:
+  X_train: (25600, 25) (samples × enhanced features)
+  X_test: (6400, 25)
+  Added 13 engineered features
+
+============================================================
+STEP 3: Computing Class Weights for Imbalance
+============================================================
+
+Class weights (higher = more emphasis on minority class):
+  benign      : 0.471
+  defacement  : 0.889
+  malware     : 8.000
+  phishing    : 1.600
+
+============================================================
+STEP 4: Training Meta-Model (LIGHTGBM)
+============================================================
+
+✓ Using SMOTE for balancing minority classes
+  Original class distribution: {np.int64(0): np.int64(13600), np.int64(1): np.int64(7200), np.int64(2): np.int64(800), np.int64(3): np.int64(4000)}
+
+Performing 5-fold cross-validation...
+
+Cross-Validation Results (on original data):
+  Accuracy:  0.9820 ± 0.0020
+  Macro-F1:  0.9664 ± 0.0044
+  Individual folds (F1): ['0.9610', '0.9676', '0.9679', '0.9623', '0.9733']
+
+Training on full training set (with SMOTE augmentation)...
+
+✓ Model saved to: meta_outputs_lightgbm/meta_model_improved.joblib
+
+============================================================
+STEP 5: Analyzing Meta-Model
+============================================================
+
+  Feature importance not available for lightgbm
+  (Use meta_learner.feature_importances_ for tree-based models)
+
+============================================================
+STEP 6: Evaluating on Test Set
+============================================================
+
+Overall Performance:
+  Accuracy:       0.9845 (98.45%)
+  Macro F1:       0.9696
+  Weighted F1:    0.9845
+
+------------------------------------------------------------
+Per-Class Performance:
+------------------------------------------------------------
+              precision    recall  f1-score   support
+
+      benign     0.9812    0.9962    0.9886      3400
+  defacement     0.9983    0.9856    0.9919      1800
+     malware     0.9626    0.9000    0.9302       200
+    phishing     0.9756    0.9600    0.9677      1000
+
+    accuracy                         0.9845      6400
+   macro avg     0.9794    0.9604    0.9696      6400
+weighted avg     0.9845    0.9845    0.9845      6400
+
+
+Confusion Matrix:
+[[3387    0    3   10]
+ [  25 1774    0    1]
+ [   6    1  180   13]
+ [  34    2    4  960]]
+
+Row = True class, Column = Predicted class
+
+============================================================
+STEP 7: Confidence Distribution Analysis
+============================================================
+
+Confidence Distribution:
+  HIGH   :  6080 samples (95.00%)
+  MEDIUM :   273 samples ( 4.27%)
+  LOW    :    47 samples ( 0.73%)
+
+Recommended Actions:
+  HIGH (>85%):   Block/Allow immediately (frontend)
+  MEDIUM (60-85%): Allow with warning (frontend)
+  LOW (<60%):    Send to backend for deep analysis
+
+============================================================
+STEP 8: Analyzing Difficult Cases
+============================================================
+
+Total misclassified: 99 / 6400 (1.55%)
+
+Example misclassifications (first 5):
+
+  URL: http://www.intercredit.lt/lt/raykite-mums
+  True: defacement, Predicted: benign (confidence: 68.27%)
+  Probabilities: {'benign': np.float64(0.6826568041318525), 'defacement': np.float64(0.2782109849718694), 'malware': np.float64(0.0013225372902565984), 'phishing': np.float64(0.03780967360602148)}
+
+  URL: http://slaviacapital.com/tlacove-spravy/slavia-capital-group-v-roku-2007-s-konsolidovanym-ziskom-185-4-mil-sk
+  True: defacement, Predicted: benign (confidence: 52.82%)
+  Probabilities: {'benign': np.float64(0.5282117690226985), 'defacement': np.float64(0.4699165325627222), 'malware': np.float64(0.000621677283177532), 'phishing': np.float64(0.001250021131401704)}
+
+  URL: http://www.icci.com.br/index.php?option=com_k2&view=item&layout=item&id=25&Itemid=56
+  True: defacement, Predicted: benign (confidence: 68.27%)
+  Probabilities: {'benign': np.float64(0.6826568041318525), 'defacement': np.float64(0.2782109849718694), 'malware': np.float64(0.0013225372902565984), 'phishing': np.float64(0.03780967360602148)}
+
+  URL: modot.mo.gov/
+  True: benign, Predicted: malware (confidence: 48.46%)
+  Probabilities: {'benign': np.float64(0.32549974285004885), 'defacement': np.float64(0.0), 'malware': np.float64(0.4845888335179835), 'phishing': np.float64(0.18991142363196759)}
+
+  URL: maritimeupdates.com/index.php?option=com_content&amp;task=view&amp;id=38724&amp;Itemid=69
+  True: benign, Predicted: phishing (confidence: 55.40%)
+  Probabilities: {'benign': np.float64(0.4069146641282925), 'defacement': np.float64(0.022428811828192036), 'malware': np.float64(0.016662495255988365), 'phishing': np.float64(0.5539940287875272)}
+
+Low confidence but correct: 25 samples
+  → These should be sent to backend for confirmation
+
+============================================================
+STEP 9: Saving Results
+============================================================
+
+✓ Feature matrices saved to: meta_outputs_lightgbm
+✓ Test predictions saved to: meta_outputs_lightgbm/test_predictions_improved.csv
+
+============================================================
+SUMMARY
+============================================================
+
+✓ Improved meta-model trained successfully!
+
+Model Configuration:
+  - Meta-learner: LIGHTGBM
+  - SMOTE: Enabled
+  - Calibration: Isotonic Regression
+  - Features: 25 (12 base + 13 engineered)
+
+Key Metrics:
+  - Test Accuracy: 0.9845 (98.45%)
+  - Macro F1-Score: 0.9696
+  - High Confidence Predictions: 95.0%
+  
+Model Performance Comparison:
+  - LightGBM (individual): 97.03%
+  - XGBoost (individual):  96.44%
+  - Previous Meta:         92.36%
+  - Improved Meta:         98.45%
+  - Improvement:           6.09%
+
+Next Steps:
+  1. Run smart_ensemble_router.py for confidence-based routing
+  2. Expected final accuracy: 96-97% with router
+  3. Deploy both meta_model_improved.joblib and router
+  4. Monitor low-confidence cases for retraining
+
+Output Directory: /Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/meta_outputs_lightgbm
+
+============================================================
+Training Complete! Ready for Part B (Router)
+============================================================

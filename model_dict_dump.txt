@@ -1,0 +1,15 @@
+
+===== model =====
+LGBMClassifier(class_weight={'benign': np.float64(0.3824760190565715),
+                             'defacement': np.float64(1.8784395246963774),
+                             'malware': np.float64(7.571553182491013),
+                             'phishing': np.float64(1.3869107564782894)},
+               colsample_bytree=0.8, learning_rate=0.05, n_estimators=500,
+               n_jobs=-1, num_leaves=64, random_state=42, subsample=0.8,
+               verbose=-1)
+
+===== metadata =====
+{'version': '1.3.0', 'training_date': '2025-10-21', 'test_accuracy': 0.9702982740322851, 'precision_weighted': 0.9709744160893685, 'recall_weighted': 0.9702982740322851, 'f1_weighted': 0.9705106295300738, 'feature_count': 66, 'training_samples': 572894, 'class_distribution': {'benign': np.int64(374464), 'phishing': np.int64(103268), 'defacement': np.int64(76246), 'malware': np.int64(18916)}, 'hyperparameters': {'boosting_type': 'gbdt', 'class_weight': {'benign': np.float64(0.3824760190565715), 'defacement': np.float64(1.8784395246963774), 'malware': np.float64(7.571553182491013), 'phishing': np.float64(1.3869107564782894)}, 'colsample_bytree': 0.8, 'importance_type': 'split', 'learning_rate': 0.05, 'max_depth': -1, 'min_child_samples': 20, 'min_child_weight': 0.001, 'min_split_gain': 0.0, 'n_estimators': 500, 'n_jobs': -1, 'num_leaves': 64, 'objective': None, 'random_state': 42, 'reg_alpha': 0.0, 'reg_lambda': 0.0, 'subsample': 0.8, 'subsample_for_bin': 200000, 'subsample_freq': 0, 'verbose': -1}, 'notes': 'Tree-based model (no feature scaling required)'}
+
+===== feature_names =====
+['action_word', 'brand_impersonation', 'brand_not_in_domain', 'brand_not_in_main_domain', 'brand_with_hyphen', 'consecutive_consonants', 'digit_letter_ratio', 'domain_bigram_diversity', 'domain_digit_ratio', 'domain_entropy', 'domain_has_digits', 'domain_is_dictionary_word', 'domain_length', 'domain_trigram_diversity', 'domain_url_ratio', 'domain_vowel_ratio', 'has_brand_name', 'has_character_substitution', 'has_ip', 'has_multiple_subdomains', 'has_port', 'host_entropy', 'is_country_tld', 'is_high_trust_tld', 'is_mixed_case', 'is_shortening_service', 'is_suspicious_tld', 'is_typosquatting', 'longest_token_length', 'multiple_brands_in_domain', 'num_digits', 'num_dots', 'num_encoded_chars', 'num_fragments', 'num_hyphens', 'num_letters', 'num_path_segments', 'num_query_params', 'num_repeated_chars', 'num_special_chars', 'num_subdomains', 'num_suspicious_symbols', 'num_suspicious_words', 'num_underscores', 'path_entropy', 'path_has_suspicious_ext', 'path_length', 'path_url_ratio', 'punycode_domain', 'query_has_redirect', 'query_length', 'query_url_ratio', 'sensitive_word', 'special_char_ratio', 'subdomain_count_dot', 'subdomain_length', 'suspicious_prefix_suffix', 'suspicious_tld_brand_combo', 'suspicious_word', 'tld_length', 'tld_trust_category', 'typosquatting_similarity', 'uppercase_ratio', 'url_entropy', 'url_length', 'uses_https']
