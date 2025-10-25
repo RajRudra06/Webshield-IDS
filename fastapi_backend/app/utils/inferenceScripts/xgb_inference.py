@@ -50,3 +50,4 @@ def process_url_with_heuristic_xgboost(url):
         'detection_reason': reason,
         'heuristic_applied': reason != "model_decision"
     }
+

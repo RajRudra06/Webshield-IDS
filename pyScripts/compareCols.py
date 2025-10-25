@@ -128,5 +128,5 @@ def count_types(input_file):
     print(f"\nTotal rows: {len(df)}")
 
 # Example usage:
-count_types('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/merged_6files.csv')
+count_types('/Users/rudrarajpurohit/Desktop/Active Ps/webshield-extension/meta_learning.csv')
 
